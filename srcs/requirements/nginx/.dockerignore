@@ -1,0 +1,15 @@
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore environment variables
+.env
+secrets/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and temp files
+*.log
+*.tmp

@@ -1,0 +1,27 @@
+docker commands
+
+	running container:
+		docker exec -it inception bash
+
+	making a new container from an image: 
+		docker run -d -t --name inception debian:oldstable
+
+	puling an image:
+		docker pull debian:oldstable
+
+docker compose:
+
+	sudo docke rcompose up -d
+	docker compose ps
+	docker network ls
+	docker inspect <newtork>
+	
+inside container:
+
+	apt-get update
+	sudo apt install docker.io docker-compose -y
+
+mariadb:
+	mariadbd-safe ->start server
+	mariadb -u <username> -p <password>
+	show databases;

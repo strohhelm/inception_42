@@ -1,0 +1,66 @@
+version: "2.2.3"
+
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    restart: always
+    secrets: 
+      - db_pw
+      - db_root_pw
+    volumes: 
+
+    networks: 
+    environment: 
+    expose: 
+
+
+
+  nginx:
+    build: ./requirements/nginx
+    restart: always
+    secrets: 
+    volumes:
+      - wordpress_data:
+    networks: 
+    environment: 
+    expose:
+    depends_on:
+      mariadb:
+        condition: service_healty
+        restart: true
+      wordpress:
+        condition: service_healthy
+        restart: true
+
+
+
+
+  wordpress:
+    build: ./requirements/wordpress
+    restart: always
+    secrets: 
+    volumes: 
+    networks: 
+    environment: 
+    expose: 
+    depends_on:
+      mariadb:
+        condition: service_healty
+        restart: true
+
+volumes:
+  wordpress_volume:
+    - /home/pstrohal/data/
+
+
+secrets:
+  inception_credentials:
+    file: ../secrets/credentials
+  db_pw:
+    file: ../secrets/db_password.txt
+  db_root_pw:
+    file: ../secrets/db_root_password.txt
+
+network:
+  damncoolnetwork:
+
