@@ -1,0 +1,44 @@
+version: "2"
+
+services:
+  
+  mariadb:
+    build: requirements/mariadb/.
+    volumes:
+      - mariaDB_volume:/var/lib/mysql
+    env_file:
+      - .env
+
+
+
+  nginx:
+    build: requirements/nginx/.
+    ports:
+      - "80:80"
+    volumes:
+      - vol_nginx_wordpress:/var/www/html
+    env_file:
+      - .env
+
+  wordpress:
+    build: requirements/wordpress/.
+    volumes:
+      - vol_nginx_wordpress:/var/www/html
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+
+volumes:
+  vol_nginx_wordpress:
+    driver: local
+    driver_opts:
+      o: bind
+      device: /Users/pstrohal/source/core/inception/srcs/volumes/wordpress_volume
+      type: none
+  mariaDB_volume:
+    driver: local
+    driver_opts:
+      o: bind
+      device: /Users/pstrohal/source/core/inception/srcs/volumes/mariaDB_volume
+      type: none

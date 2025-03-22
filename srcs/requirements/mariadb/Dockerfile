@@ -1,8 +1,12 @@
 # syntax=docker/dockerfile:1
 FROM debian:oldstable
 
-RUN apt-get update; apt-get install -y curl; apt install -y mariadb-server mariadb-client
+RUN apt-get update; apt install -y curl mariadb-server
 
-RUN /bin/bash
+COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/.
+COPY ./tools/init.sh .
+COPY ./tools/database.txt .
 
+RUN chmod +x init.sh
 
+ENTRYPOINT ["./init.sh"]
