@@ -1,14 +1,16 @@
 version: "2"
 
 services:
-  
   mariadb:
     build: requirements/mariadb/.
     volumes:
       - mariaDB_volume:/var/lib/mysql
     env_file:
       - .env
-
+    ports:
+      - "3306:3306"
+    networks:
+      - inception_network
 
 
   nginx:
@@ -19,6 +21,10 @@ services:
       - vol_nginx_wordpress:/var/www/html
     env_file:
       - .env
+    depends_on:
+      - wordpress
+    networks:
+      - inception_network
 
   wordpress:
     build: requirements/wordpress/.
@@ -28,6 +34,8 @@ services:
       - .env
     depends_on:
       - mariadb
+    networks:
+      - inception_network
 
 volumes:
   vol_nginx_wordpress:
@@ -42,3 +50,15 @@ volumes:
       o: bind
       device: /Users/pstrohal/source/core/inception/srcs/volumes/mariaDB_volume
       type: none
+
+networks:
+  inception_network:
+
+secrets:
+  wp_admin_pw:
+    file: ./secrets/wp_admin_password.txt
+  db_root_pw:
+    file: ./secrets/db_root_password.txt
+  wp_admin:
+    file: ./secrets/
+
