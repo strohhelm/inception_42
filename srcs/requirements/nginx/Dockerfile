@@ -1,17 +1,19 @@
 # syntax=docker/dockerfile:1
 FROM debian:bullseye
 
-RUN	apt-get update && apt install -y nginx
+RUN	apt-get update && apt install -y \
+	nginx \
+	openssl
 
 RUN mkdir -p /var/www/html
 
 
-
-
 COPY ./conf/default /etc/nginx/sites-available/.
-COPY ./tools/init.sh .
+COPY ./conf/index.html /index.html
 
-RUN chmod +x ./init.sh
+COPY ./tools/ng_init.sh .
+
+RUN chmod +x ./ng_init.sh
 
 
-ENTRYPOINT ["./init.sh"]
+ENTRYPOINT ["./ng_init.sh"]

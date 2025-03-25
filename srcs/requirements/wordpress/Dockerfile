@@ -3,7 +3,6 @@ FROM debian:bullseye
 
 RUN	apt-get update && apt install -y \
 	php7.4-fpm \
-	mariadb-client \
 	php7.4-mysqli \
 	php7.4-pdo \
 	php7.4-mbstring \
@@ -18,11 +17,11 @@ RUN	apt-get update && apt install -y \
 	php7.4-soap \
 	php7.4-xmlrpc \
 	php7.4-imagick \
-	curl
+	curl \
+	netcat 
 
 RUN mkdir -p  /var/www/html /run/php
 
-# COPY ./conf/index.html /index.html
 COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/.
 COPY ./tools/wp_init.sh .
 

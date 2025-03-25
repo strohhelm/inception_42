@@ -6,9 +6,12 @@ RUN apt-get update; apt install -y \
 	mariadb-server \
 	gettext
 
+RUN mkdir -p /run/mysql
+
 COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/.
+# COPY ./conf/my.cnf /etc/mysql/mariadb.conf.d/.
 COPY ./tools/db_init.sh .
-COPY ./tools/database.sql .
+COPY ./tools/database_init.sql .
 
 RUN chmod +x db_init.sh
 
