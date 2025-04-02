@@ -1,18 +1,17 @@
 
 
-COMPOSE= ./srcs/docker-compose.yml
-VOLUMES= ./srcs/volumes/mariaDB_volume ./srcs/volumes/wordpress_volume
+COMPOSE=./srcs/docker-compose.yml
+VOLUMES=/home/pstrohal/data/mariaDB_volume \
+		/home/pstrohal/data/wordpress_volume
+FOLDERS=/home/pstrohal/data/secrets
 
 all: build up
 
-up:
+up: 
 	docker compose -f $(COMPOSE) up 
 
 build:
-	mkdir -p ./srcs/volumes
-	mkdir -p $(VOLUMES)
-	mkdir -p ./secrets
-	# touch ./secrets/wp_admin_password.txt ./secrets/db_root_password.txt
+	mkdir -p $(VOLUMES) $(FOLDERS)
 	docker compose -f $(COMPOSE) build --no-cache
 
 down:
