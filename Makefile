@@ -15,7 +15,7 @@ up:
 build:
 	mkdir -p $(DFOLDER) $(VOLUMES)
 	@if [ ! -f $(SECRET1) ];then echo "no secrets provided!";exit 1;fi
-	@if [ ! -f ./srcs/.env ];then echo "noe environment provided!!!";exit 1;fi
+	@if [ ! -f $(DFOLDER)/.env ];then echo "noe environment provided!!!";exit 1;fi
 	sudo docker compose -f $(COMPOSE) build 
 
 down:

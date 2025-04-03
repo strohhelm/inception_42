@@ -5,7 +5,7 @@ services:
     volumes:
       - mariaDB_volume:/var/lib/mysql
     env_file:
-      - ${HOME}/data/.env
+      - /home/pstrohal/data/.env
     ports:
       - "3306:3306"
     networks:
@@ -32,7 +32,7 @@ services:
     volumes:
       - vol_nginx_wordpress:/var/www/html
     env_file:
-      - ${HOME}/data/.env
+      - /home/pstrohal/data/.env
     networks:
       - inception_network
 
@@ -51,7 +51,7 @@ services:
     volumes:
       - vol_nginx_wordpress:/var/www/html
     env_file:
-      - ${HOME}/data/.env
+      - /home/pstrohal/data/.env
     networks:
       - inception_network
     secrets:
