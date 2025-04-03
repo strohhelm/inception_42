@@ -28,7 +28,6 @@ services:
         condition: service_healthy
     ports:
       - "443:443"
-      # - "80:80"
     volumes:
       - vol_nginx_wordpress:/var/www/html
     env_file:

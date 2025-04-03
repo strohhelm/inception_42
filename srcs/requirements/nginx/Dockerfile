@@ -8,7 +8,7 @@ RUN	apt-get update && apt install -y \
 RUN mkdir -p /var/www/html
 
 
-COPY ./conf/default /etc/nginx/sites-available/.
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 COPY ./conf/index.html /index.html
 
 COPY ./tools/ng_init.sh .
