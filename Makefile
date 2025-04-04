@@ -8,7 +8,6 @@ ifeq ($(shell uname -s),Darwin)
 	ENV_FILE=./srcs/.env
 else
 	ENV_FILE=/home/pstrohal/setup/.env
-	$(shell cp $(ENV_FILE) ./srcs/.env)
 endif
 
 include $(ENV_FILE)
@@ -18,13 +17,15 @@ WPVOLUME=$(VOLUME_PATH)/wordpress_volume
 DBVOLUME=$(VOLUME_PATH)/mariaDB_volume
 VOLUMES= $(WPVOLUME) $(DBVOLUME)
 SECRETS=./secrets
+ENV=./srcs/.env
 
 all: build up
 
 up: 
 	$(SUDO) docker compose -f $(COMPOSE) up
 
-build:
+build: 
+	cp $(ENV_FILE) $(ENV)
 	if [ ! -f ./srcs/.env ] ;then echo "NO ENVIRONMENT PROVIDED!!";exit 1;fi
 	if [ ! -d $(SECRETS) ] ;then mkdir -p $(SECRETS); cp $(SETUP_SECRETS)/* $(SECRETS);fi
 	if [ ! "$(shell ls $(SECRETS))" ] ;then echo "NO SECRETS PROVIDED!";exit 1;fi
