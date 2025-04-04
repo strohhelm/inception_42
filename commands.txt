@@ -25,3 +25,24 @@ mariadb:
 	mariadbd-safe ->start server
 	mariadb -u <username> -p <password>
 	show databases;
+
+.env file need the folllowing attributes:
+DOMAIN_NAME= <...>
+DOMAIN_TITLE= <...>
+DB_NAME= <...>
+WP_ADMIN= <...>
+WP_USER= <...>
+VOLUME_PATH= <...>
+SETUP_SECRETS= <...>
+
+secrets folder need to have 3 files:
+db_root_password.txt
+wp_admin_password.txt
+wp_user_password.txt
+
+redis:
+
+docker exec -it srcs-redis-1 bash
+redis-cli
+MONITOR
+

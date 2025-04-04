@@ -25,12 +25,12 @@ up:
 	$(SUDO) docker compose -f $(COMPOSE) up
 
 build: 
-	cp $(ENV_FILE) $(ENV)
-	if [ ! -f ./srcs/.env ] ;then echo "NO ENVIRONMENT PROVIDED!!";exit 1;fi
-	if [ ! -d $(SECRETS) ] ;then mkdir -p $(SECRETS); cp $(SETUP_SECRETS)/* $(SECRETS);fi
-	if [ ! "$(shell ls $(SECRETS))" ] ;then echo "NO SECRETS PROVIDED!";exit 1;fi
-	mkdir -p $(VOLUME_PATH) $(VOLUMES)
-	$(SUDO) docker compose -f $(COMPOSE) build 
+	@if [ ! -f ./srcs/.env ] ;then cp $(ENV_FILE) $(ENV);fi
+	@if [ ! -f ./srcs/.env ] ;then echo "NO ENVIRONMENT PROVIDED!!";exit 1;fi
+	@if [ ! -d $(SECRETS) ] ;then mkdir -p $(SECRETS); cp $(SETUP_SECRETS)/* $(SECRETS);fi
+	@if [ ! "$(shell ls $(SECRETS))" ] ;then echo "NO SECRETS PROVIDED!";exit 1;fi
+	@mkdir -p $(VOLUME_PATH) $(VOLUMES)
+	@$(SUDO) docker compose -f $(COMPOSE) build 
 
 down:
 	$(SUDO) docker compose -f $(COMPOSE) down 
@@ -52,6 +52,6 @@ prune:
 		rm -rf ./srcs/volumes/mariaDB_volume/* 
 		rm -rf ./srcs/volumes/wordpress_volume/* 
 
-re: down prune up
+re: fclean all
 
 again: stop down all

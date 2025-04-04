@@ -1,5 +1,7 @@
 services:
+
   mariadb:
+    container_name: "mariadb"
     build: requirements/mariadb/.
     restart: unless-stopped
     volumes:
@@ -7,7 +9,7 @@ services:
     env_file:
       - .env
     ports:
-      - "3306:3306"
+      - 3306:3306
     networks:
       - inception_network
     secrets:
@@ -21,13 +23,14 @@ services:
       start_period: 10s
 
   nginx:
+    container_name: "nginx"
     restart: unless-stopped
     build: requirements/nginx/.
     depends_on:
       wordpress:
         condition: service_healthy
     ports:
-      - "443:443"
+      - 443:443
     volumes:
       - ${VOLUME_PATH}/wordpress_volume:/var/www/html
     env_file:
@@ -36,10 +39,13 @@ services:
       - inception_network
 
   wordpress:
+    container_name: "wordpress"
     build: requirements/wordpress/.
     restart: unless-stopped
     depends_on:
       mariadb:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "pgrep", "-f", "php-fpm"]
@@ -57,6 +63,41 @@ services:
       - wp_admin_pw
       - wp_user_pw
 
+  redis:
+    container_name: "redis"
+    build: requirements/bonus/redis/.
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "PING"]
+      interval: 30s      # Check every 30 seconds
+      retries: 3         # Retry 3 times before marking as unhealthy
+      start_period: 10s  # Allow 10 seconds for the container to start
+      timeout: 5s        # Timeout after 5 seconds if no response
+    networks:
+      - inception_network
+    ports:
+      - "6379:6379"
+
+  adminer:
+    container_name: adminer
+    build: requirements/bonus/adminer/.
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - inception_network
+
+  website:
+    container_name: website
+    build: requirements/bonus/website/.
+    restart: unless-stopped
+    ports:
+      - 6969:6969
+    networks:
+      - inception_network
 # volumes:
 #   wordpress_volume:
 #     driver: local
