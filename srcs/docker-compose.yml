@@ -3,9 +3,9 @@ services:
     build: requirements/mariadb/.
     restart: unless-stopped
     volumes:
-      - mariaDB_volume:/var/lib/mysql
+      - ${VOLUME_PATH}/mariaDB_volume:/var/lib/mysql
     env_file:
-      - /home/pstrohal/data/.env
+      - .env
     ports:
       - "3306:3306"
     networks:
@@ -29,9 +29,9 @@ services:
     ports:
       - "443:443"
     volumes:
-      - vol_nginx_wordpress:/var/www/html
+      - ${VOLUME_PATH}/wordpress_volume:/var/www/html
     env_file:
-      - /home/pstrohal/data/.env
+      - .env
     networks:
       - inception_network
 
@@ -48,40 +48,38 @@ services:
       retries: 3
       start_period: 12s
     volumes:
-      - vol_nginx_wordpress:/var/www/html
+      - ${VOLUME_PATH}/wordpress_volume:/var/www/html
     env_file:
-      - /home/pstrohal/data/.env
+      - .env
     networks:
       - inception_network
     secrets:
       - wp_admin_pw
       - wp_user_pw
 
-
-
-volumes:
-  vol_nginx_wordpress:
-    driver: local
-    driver_opts:
-      o: bind
-      device: /home/pstrohal/data/wordpress_volume
-      type: none
-  mariaDB_volume:
-    driver: local
-    driver_opts:
-      o: bind
-      device: /home/pstrohal/data/mariaDB_volume
-      type: none
+# volumes:
+#   wordpress_volume:
+#     driver: local
+#     driver_opts:
+#       o: bind
+#       device: ${VOLUME_PATH}/wordpress_volume
+#       type: none
+#   mariaDB_volume:
+#     driver: local
+#     driver_opts:
+#       o: bind
+#       device: ${VOLUME_PATH}/mariaDB_volume
+#       type: none
 
 networks:
   inception_network:
 
 secrets:
   wp_admin_pw:
-    file: /home/pstrohal/data/secrets/wp_admin_password.txt
+    file: ../secrets/wp_admin_password.txt
   wp_user_pw:
-    file: /home/pstrohal/data/secrets/wp_user_password.txt
+    file: ../secrets/wp_user_password.txt
   db_root_pw:
-    file: /home/pstrohal/data/secrets/db_root_password.txt
+    file: ../secrets/db_root_password.txt
 
 
