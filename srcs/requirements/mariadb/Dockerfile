@@ -4,7 +4,8 @@ FROM debian:oldstable
 RUN apt-get update; apt install -y \
 	curl \
 	mariadb-server \
-	gettext
+	gettext \
+	ftp
 
 RUN mkdir -p /run/mysql
 

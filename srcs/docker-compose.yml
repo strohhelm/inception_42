@@ -98,6 +98,37 @@ services:
       - 6969:6969
     networks:
       - inception_network
+
+  ftp-server:
+    container_name: ftp-server
+    build: requirements/bonus/ftp/.
+    restart: unless-stopped
+    volumes:
+      -  ${VOLUME_PATH}/ftp_volume:/home/ftpuser
+    ports:
+      - 21:21
+    networks:
+      - inception_network
+    secrets:
+      - ftp_user_pw
+    env_file:
+      - .env
+
+  portainer:
+    container_name: portainer
+    build: requirements/bonus/portainer/.
+    restart: unless-stopped
+    volumes:
+      -  ${VOLUME_PATH}/portainer_volume:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9000:9000
+    networks:
+      - inception_network
+    secrets:
+      - ftp_user_pw
+
+
 # volumes:
 #   wordpress_volume:
 #     driver: local
@@ -111,7 +142,18 @@ services:
 #       o: bind
 #       device: ${VOLUME_PATH}/mariaDB_volume
 #       type: none
-
+#   ftp_volume:
+#     driver: local
+#     driver_opts:
+#       o: bind
+#       device: ${VOLUME_PATH}/ftp_volume
+#       type: none
+#    portainer_volume:
+#     driver: local
+#     driver_opts:
+#       o: bind
+#       device: ${VOLUME_PATH}/portainer_volume
+#       type: none
 networks:
   inception_network:
 
@@ -122,5 +164,7 @@ secrets:
     file: ../secrets/wp_user_password.txt
   db_root_pw:
     file: ../secrets/db_root_password.txt
+  ftp_user_pw:
+    file: ../secrets/ftp_user_password.tx
 
 

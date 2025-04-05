@@ -15,7 +15,9 @@ export $(shell sed 's/=.*//' $(ENV_FILE))
 
 WPVOLUME=$(VOLUME_PATH)/wordpress_volume
 DBVOLUME=$(VOLUME_PATH)/mariaDB_volume
-VOLUMES= $(WPVOLUME) $(DBVOLUME)
+FTPVOLUME=$(VOLUME_PATH)/ftp_volume
+PORTAINERVOLUME=$(VOLUME_PATH)/portainer_volume
+VOLUMES= $(WPVOLUME) $(DBVOLUME) $(FTPVOLUME) $(PORTAINERVOLUME)
 SECRETS=./secrets
 ENV=./srcs/.env
 
@@ -30,9 +32,9 @@ build:
 	@if [ ! -d $(SECRETS) ] ;then mkdir -p $(SECRETS); cp $(SETUP_SECRETS)/* $(SECRETS);fi
 	@if [ ! "$(shell ls $(SECRETS))" ] ;then echo "NO SECRETS PROVIDED!";exit 1;fi
 	@mkdir -p $(VOLUME_PATH) $(VOLUMES)
-	@$(SUDO) docker compose -f $(COMPOSE) build 
+	@$(SUDO) docker compose -f $(COMPOSE) build
 
-down:
+down: stop
 	$(SUDO) docker compose -f $(COMPOSE) down 
 
 stop:
