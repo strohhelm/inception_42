@@ -26,13 +26,13 @@ all: build up
 up: 
 	$(SUDO) docker compose -f $(COMPOSE) up
 
-build: 
-	@if [ ! -f ./srcs/.env ] ;then cp $(ENV_FILE) $(ENV);fi
+build:
+	@if [ ! -f ./srcs/.env ] ;then echo "COPYING ENV_FILE.."; cp $(ENV_FILE) $(ENV);fi
 	@if [ ! -f ./srcs/.env ] ;then echo "NO ENVIRONMENT PROVIDED!!";exit 1;fi
-	@if [ ! -d $(SECRETS) ] ;then mkdir -p $(SECRETS); cp $(SETUP_SECRETS)/* $(SECRETS);fi
-	@if [ ! "$(shell ls $(SECRETS))" ] ;then echo "NO SECRETS PROVIDED!";exit 1;fi
+	@if [ ! -d $(SECRETS) ] ;then echo "CREATiNG DIRECTORY \"$(SECRETS)\"" &&  mkdir -p $(SECRETS) &&  echo "COPYING SECRETS.." && cp $(SETUP_SECRETS)/* $(SECRETS);fi
+	@if [ ! "(ls $(SECRETS))" ];then echo "NO SECRETS PROVIDED!";exit 1;fi
 	@mkdir -p $(VOLUME_PATH) $(VOLUMES)
-	@$(SUDO) docker compose -f $(COMPOSE) build
+	$(SUDO) docker compose -f $(COMPOSE) build
 
 down: stop
 	$(SUDO) docker compose -f $(COMPOSE) down 
@@ -44,11 +44,11 @@ start:
 	$(SUDO) docker compose -f $(COMPOSE) start
 
 fclean: stop down
-	@if [ -n "$$(docker ps -qa)" ]; then $(SUDO) docker stop $$(docker ps -qa); fi
-	@if [ -n "$$(docker ps -qa)" ]; then $(SUDO) docker rm $$(docker ps -qa); fi
-	@if [ -n "$$(docker images -qa)" ]; then $(SUDO) docker rmi -f $$(docker images -qa); fi
-	@if [ -n "$$(docker volume ls -q)" ]; then $(SUDO) docker volume rm $$(docker volume ls -q); fi
-	@if [ -n "$$(docker network ls -q)" ]; then $(SUDO) docker network rm $$(docker network ls -q) 2>/dev/null || true; fi
+	@if [ -n "$$(docker ps -qa)" ]; then $(SUDO) docker stop $$($(SUDO) docker ps -qa); fi
+	@if [ -n "$$(docker ps -qa)" ]; then $(SUDO) docker rm $$($(SUDO) docker ps -qa); fi
+	@if [ -n "$$(docker images -qa)" ]; then $(SUDO) docker rmi -f $$($(SUDO) docker images -qa); fi
+	@if [ -n "$$(docker volume ls -q)" ]; then $(SUDO) docker volume rm $$($(SUDO) docker volume ls -q); fi
+	@if [ -n "$$(docker network ls -q)" ]; then $(SUDO) docker network rm $$($(SUDO) docker network ls -q) 2>/dev/null || true; fi
 
 re: fclean all
 

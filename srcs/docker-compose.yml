@@ -52,7 +52,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 12s
+      start_period: 20s
     volumes:
       - ${VOLUME_PATH}/wordpress_volume:/var/www/html
     env_file:
