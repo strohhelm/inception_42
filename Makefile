@@ -50,10 +50,6 @@ fclean: stop down
 	@if [ -n "$$(docker volume ls -q)" ]; then $(SUDO) docker volume rm $$(docker volume ls -q); fi
 	@if [ -n "$$(docker network ls -q)" ]; then $(SUDO) docker network rm $$(docker network ls -q) 2>/dev/null || true; fi
 
-prune:
-		rm -rf ./srcs/volumes/mariaDB_volume/* 
-		rm -rf ./srcs/volumes/wordpress_volume/* 
-
 re: fclean all
 
 again: stop down all
