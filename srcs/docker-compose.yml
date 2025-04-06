@@ -165,6 +165,6 @@ secrets:
   db_root_pw:
     file: ../secrets/db_root_password.txt
   ftp_user_pw:
-    file: ../secrets/ftp_user_password.tx
+    file: ../secrets/ftp_user_password.txt
 
 
