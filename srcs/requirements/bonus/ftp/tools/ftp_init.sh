@@ -5,8 +5,9 @@ USERPASSWORD=$(cat /run/secrets/ftp_user_pw)
 if [ ! "$(cat /etc/passwd | grep $FTP_USER)" ]
 then
 	echo "[FTP_SERVER] adding user and setting up permissions"
-	useradd $FTP_USER
+	useradd -m $FTP_USER
 	echo "$FTP_USER:$USERPASSWORD" | chpasswd
+	chown $FTP_USER:$FTP_USER /home/$FTP_USER
 	echo "$FTP_USER" > /etc/vsftpd.user_list
 
 	mkdir -p /var/run/vsftpd/empty
