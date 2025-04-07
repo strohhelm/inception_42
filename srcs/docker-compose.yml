@@ -94,6 +94,9 @@ services:
     container_name: website
     build: requirements/bonus/website/.
     restart: unless-stopped
+    depends_on:
+      nginx: 
+        condition: service_started
     ports:
       - 6969:6969
     networks:
@@ -103,6 +106,9 @@ services:
     container_name: ftp-server
     build: requirements/bonus/ftp/.
     restart: unless-stopped
+    depends_on:
+      portainer:
+        condition: service_started
     volumes:
       -  ${VOLUME_PATH}/ftp_volume:/home/ftpuser
     ports:
@@ -118,6 +124,9 @@ services:
     container_name: portainer
     build: requirements/bonus/portainer/.
     restart: unless-stopped
+    depends_on:
+      website:
+        condition: service_started
     volumes:
       -  ${VOLUME_PATH}/portainer_volume:/data
       - /var/run/docker.sock:/var/run/docker.sock
