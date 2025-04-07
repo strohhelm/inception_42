@@ -110,9 +110,10 @@ services:
       portainer:
         condition: service_started
     volumes:
-      -  ${VOLUME_PATH}/ftp_volume:/home/ftpuser
+      -  ${VOLUME_PATH}/wordpress_volume:/var/www/html
     ports:
       - 21:21
+      - 30200-30300:30200-30300
     networks:
       - inception_network
     secrets:
