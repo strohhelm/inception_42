@@ -5,7 +5,7 @@ services:
     build: requirements/mariadb/.
     restart: unless-stopped
     volumes:
-      - ${VOLUME_PATH}/mariaDB_volume:/var/lib/mysql
+      - mariaDB_volume:/var/lib/mysql
     env_file:
       - .env
     ports:
@@ -32,7 +32,7 @@ services:
     ports:
       - 443:443
     volumes:
-      - ${VOLUME_PATH}/wordpress_volume:/var/www/html
+      - wordpress_volume:/var/www/html
     env_file:
       - .env
     networks:
@@ -54,7 +54,7 @@ services:
       retries: 3
       start_period: 60s
     volumes:
-      - ${VOLUME_PATH}/wordpress_volume:/var/www/html
+      - wordpress_volume:/var/www/html
     env_file:
       - .env
     networks:
@@ -69,10 +69,10 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "PING"]
-      interval: 30s      # Check every 30 seconds
-      retries: 3         # Retry 3 times before marking as unhealthy
-      start_period: 10s  # Allow 10 seconds for the container to start
-      timeout: 5s        # Timeout after 5 seconds if no response
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 5s
     networks:
       - inception_network
     ports:
@@ -110,7 +110,7 @@ services:
       portainer:
         condition: service_started
     volumes:
-      -  ${VOLUME_PATH}/wordpress_volume:/var/www/html
+      - wordpress_volume:/var/www/html
     ports:
       - 21:21
       - 30200-30300:30200-30300
@@ -129,7 +129,7 @@ services:
       website:
         condition: service_started
     volumes:
-      -  ${VOLUME_PATH}/portainer_volume:/data
+      -  portainer_volume:/data
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 9000:9000
@@ -139,31 +139,32 @@ services:
       - port_admin_pw
 
 
-# volumes:
-#   wordpress_volume:
-#     driver: local
-#     driver_opts:
-#       o: bind
-#       device: ${VOLUME_PATH}/wordpress_volume
-#       type: none
-#   mariaDB_volume:
-#     driver: local
-#     driver_opts:
-#       o: bind
-#       device: ${VOLUME_PATH}/mariaDB_volume
-#       type: none
-#   ftp_volume:
-#     driver: local
-#     driver_opts:
-#       o: bind
-#       device: ${VOLUME_PATH}/ftp_volume
-#       type: none
-#    portainer_volume:
-#     driver: local
-#     driver_opts:
-#       o: bind
-#       device: ${VOLUME_PATH}/portainer_volume
-#       type: none
+volumes:
+  wordpress_volume:
+    driver: local
+    driver_opts:
+      o: bind
+      device: ${VOLUME_PATH}/wordpress_volume
+      type: none
+  mariaDB_volume:
+    driver: local
+    driver_opts:
+      o: bind
+      device: ${VOLUME_PATH}/mariaDB_volume
+      type: none
+  ftp_volume:
+    driver: local
+    driver_opts:
+      o: bind
+      device: ${VOLUME_PATH}/ftp_volume
+      type: none
+  portainer_volume:
+    driver: local
+    driver_opts:
+      o: bind
+      device: ${VOLUME_PATH}/portainer_volume
+      type: none
+
 networks:
   inception_network:
 
